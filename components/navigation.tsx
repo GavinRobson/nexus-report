@@ -3,12 +3,9 @@
 import { usePathname } from 'next/navigation';
 
 import { NavButton } from '@/components/nav-button';
+import { AccountNavButton } from '@/components/account-nav-button';
 
 const routes = [
-  {
-    href: '/account',
-    label: 'Account',
-  },
   {
     href: '/champions',
     label: 'Champions',
@@ -24,6 +21,9 @@ export const Navigation = () => {
 
   return (
     <nav className="flex items-center">
+      <AccountNavButton 
+        isActive={pathname==='/account'}
+      />
       {routes.map((route) => (
         <NavButton
           key={route.href}

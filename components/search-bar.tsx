@@ -1,7 +1,9 @@
 export const SearchBar = () => {
   return (
-    <div>
-      <div></div>
+    <div className="w-full h-full">
+      <div>
+        
+      </div>
     </div>
   );
 };

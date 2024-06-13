@@ -1,14 +1,14 @@
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import Link from 'next/link';
+import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 type Props = {
-  href: string;
-  label: string;
-  isActive?: boolean;
-};
+  isActive?: boolean
+}
 
-export const NavButton = ({ href, label, isActive }: Props) => {
+export const AccountNavButton = ({
+  isActive
+}: Props) => {
   return (
     <Button
       asChild
@@ -19,7 +19,7 @@ export const NavButton = ({ href, label, isActive }: Props) => {
         isActive ? 'bg-[#13151b] text-white border-b-0' : 'text-[#45484e]',
       )}
     >
-      <Link href={href}>{label}</Link>
+      <Link href='/account'>Account</Link>
     </Button>
   );
-};
+}
