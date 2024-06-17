@@ -1,7 +1,4 @@
-'use client';
-
-import { usePathname } from 'next/navigation';
-
+import { currentUser } from '@clerk/nextjs/server';
 import { NavButton } from '@/components/nav-button';
 import { AccountNavButton } from '@/components/account-nav-button';
 
@@ -11,26 +8,21 @@ const routes = [
     label: 'Champions',
   },
   {
-    href: '/matches',
-    label: 'Matches',
+    href: '/leaderboard',
+    label: 'Leaderboard',
+  },
+  {
+    href: '/items',
+    label: 'Items',
   },
 ];
 
-export const Navigation = () => {
-  const pathname = usePathname();
-
+export const Navigation = async () => {
   return (
     <nav className="flex items-center">
-      <AccountNavButton 
-        isActive={pathname==='/account'}
-      />
+      <AccountNavButton />
       {routes.map((route) => (
-        <NavButton
-          key={route.href}
-          href={route.href}
-          label={route.label}
-          isActive={pathname === route.href}
-        />
+        <NavButton key={route.href} href={route.href} label={route.label} />
       ))}
     </nav>
   );
