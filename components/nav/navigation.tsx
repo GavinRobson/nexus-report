@@ -1,6 +1,6 @@
 import { currentUser } from '@clerk/nextjs/server';
-import { NavButton } from '@/components/nav-button';
-import { AccountNavButton } from '@/components/account-nav-button';
+import { NavButton } from '@/components/nav/nav-button';
+import { AccountNavButton } from '@/components/nav/account-nav-button';
 
 const routes = [
   {

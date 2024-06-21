@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import bcrypt from 'bcrypt';
-import prismadb from '@/lib/prismadb';
+import bcrypt from 'bcryptjs';
+import { db } from '@/lib/db';
 
 export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
 
-    const existingUser = await prismadb.user.findUnique({
+    const existingUser = await db.user.findUnique({
       where: {
         email,
       },
@@ -17,10 +17,10 @@ export async function POST(req: NextRequest) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const user = await prismadb.user.create({
+    const user = await db.user.create({
       data: {
         email,
-        hashedPassword,
+        password: hashedPassword,
         emailVerified: new Date(),
       },
     });

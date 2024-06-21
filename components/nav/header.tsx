@@ -1,7 +1,7 @@
-import { HeaderLogo } from '@/components/header-logo';
-import { Navigation } from '@/components/navigation';
-import { SearchBar } from '@/components/search-bar';
-import { ProfileButton } from '@/components/profile-button';
+import { HeaderLogo } from '@/components/nav/header-logo';
+import { Navigation } from '@/components/nav/navigation';
+import { SearchBar } from '@/components/nav/search-bar';
+import { ProfileButton } from '@/components/nav/profile-button';
 
 export const Header = () => {
   return (
