@@ -1,16 +1,9 @@
-import { auth } from '@/auth';
-import { redirect } from 'next/navigation';
-
-export default async function Account() {
-  const session = await auth();
-
-  if (!session) {
-    redirect('/auth');
-  }
-
-  return (
+const AccountPage = () => {
+  return ( 
     <div>
-      <div>Account Page</div>
+      Account Page
     </div>
-  );
+   );
 }
+ 
+export default AccountPage;
