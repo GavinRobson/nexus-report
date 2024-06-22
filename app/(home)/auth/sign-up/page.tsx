@@ -33,6 +33,7 @@ const SignUpPage = () => {
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
+    mode: 'onTouched',
     defaultValues: {
       username: '',
       email: '',
@@ -48,7 +49,7 @@ const SignUpPage = () => {
       register(values).then((data) => {
         setError(data?.error);
         if (data?.success) {
-          login(values).then((data) => {
+          login(values).then(() => {
             router.push('/account');
           });
         }

@@ -17,7 +17,7 @@ export const ProfileButton = async () => {
     <div className="flex items-center ml-auto px-5">
       <div className="pt-2">
         {session ? (
-          <LoggedInButton email={session.user?.name} />
+          <LoggedInButton username={session.user?.name} />
         ) : (
           <SignInButton />
         )}
