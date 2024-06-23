@@ -1,28 +1,32 @@
-'use client'
-
+'use client';
 
 import * as z from 'zod';
-import { linkRiotAccount } from "@/actions/linkRiotAccount"
-import { RiotAccountSchema } from "@/schemas"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Session } from "next-auth"
-import { useRouter } from "next/navigation"
-import { useState, useTransition } from "react"
-import { useForm } from "react-hook-form"
-import { Form, FormControl, FormField, FormItem } from "../ui/form"
-import { FormError } from "../form-error"
-import { FormSuccess } from "../form-success"
-import { Button } from "../ui/button"
+import { linkRiotAccount } from '@/actions/linkRiotAccount';
+import { RiotAccountSchema } from '@/schemas';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Session } from 'next-auth';
+import { useRouter } from 'next/navigation';
+import { useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '../ui/form';
+import { FormError } from '../form-error';
+import { FormSuccess } from '../form-success';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
 
 type Props = {
-  session: Session
-}
+  session: Session;
+};
 
-export const LinkRiotAccount = ({
-  session
-}: Props) => {
-  const [error, setError] = useState<string | undefined>('')
-  const [success, setSuccess] = useState<string | undefined>('')
+export const LinkRiotAccount = ({ session }: Props) => {
+  const [error, setError] = useState<string | undefined>('');
+  const [success, setSuccess] = useState<string | undefined>('');
   const [isPending, startTransition] = useTransition();
 
   const router = useRouter();
@@ -30,10 +34,10 @@ export const LinkRiotAccount = ({
   const form = useForm<z.infer<typeof RiotAccountSchema>>({
     resolver: zodResolver(RiotAccountSchema),
     defaultValues: {
-    username: '',
-    tag: '',
-    region: '',
-    }
+      username: '',
+      tag: '',
+      region: '',
+    },
   });
 
   const onSubmit = (values: z.infer<typeof RiotAccountSchema>) => {
@@ -43,12 +47,12 @@ export const LinkRiotAccount = ({
       linkRiotAccount(values, session.user?.id).then((data) => {
         setError(data?.error);
         if (!data?.error) {
-          router.push('/settings')
+          router.push('/settings');
         }
-      })  
-    })
-  }
-  
+      });
+    });
+  };
+
   return (
     <div className="flex justify-center mt-36">
       <div className="bg-[#0e1015] px-16 py-8 self-center mt-2 h-2/5 max-w-md rounded-md w-full">
@@ -68,7 +72,12 @@ export const LinkRiotAccount = ({
                         <input
                           {...field}
                           autoComplete="off"
-                          className="block rounded-md px-6 pt-6 pb-1 w-full text-md text-white bg-neutral-800 focus:outline-none focus:ring-0 peer"
+                          className={cn(
+                            'block rounded-md px-6 pt-6 pb-1 w-full text-md text-white focus:outline-none focus:ring-0 peer outline-t',
+                            form.getFieldState('username').error
+                              ? 'bg-[#FF003D]/15 outline outline-1 outline-red-800'
+                              : 'bg-neutral-800'
+                          )}
                           disabled={isPending}
                           placeholder=" "
                         />
@@ -77,6 +86,7 @@ export const LinkRiotAccount = ({
                         </label>
                       </div>
                     </FormControl>
+                    <FormMessage className="text-red-800" />
                   </FormItem>
                 )}
               />
@@ -90,7 +100,12 @@ export const LinkRiotAccount = ({
                         <input
                           {...field}
                           autoComplete="off"
-                          className="block rounded-md px-6 pt-6 pb-1 w-full text-md text-white bg-neutral-800 focus:outline-none focus:ring-0 peer"
+                          className={cn(
+                            'block rounded-md px-6 pt-6 pb-1 w-full text-md text-white focus:outline-none focus:ring-0 peer outline-t',
+                            form.getFieldState('tag').error
+                              ? 'bg-[#FF003D]/15 outline outline-1 outline-red-800'
+                              : 'bg-neutral-800'
+                          )}
                           disabled={isPending}
                           placeholder=" "
                         />
@@ -99,6 +114,7 @@ export const LinkRiotAccount = ({
                         </label>
                       </div>
                     </FormControl>
+                    <FormMessage className="text-red-800" />
                   </FormItem>
                 )}
               />
@@ -112,7 +128,12 @@ export const LinkRiotAccount = ({
                         <input
                           {...field}
                           autoComplete="off"
-                          className="block rounded-md px-6 pt-6 pb-1 w-full text-md text-white bg-neutral-800 focus:outline-none focus:ring-0 peer"
+                          className={cn(
+                            'block rounded-md px-6 pt-6 pb-1 w-full text-md text-white focus:outline-none focus:ring-0 peer outline-t',
+                            form.getFieldState('region').error
+                              ? 'bg-[#FF003D]/15 outline outline-1 outline-red-800'
+                              : 'bg-neutral-800'
+                          )}
                           disabled={isPending}
                           placeholder=" "
                         />
@@ -121,6 +142,7 @@ export const LinkRiotAccount = ({
                         </label>
                       </div>
                     </FormControl>
+                    <FormMessage className="text-red-800" />
                   </FormItem>
                 )}
               />
@@ -135,4 +157,4 @@ export const LinkRiotAccount = ({
       </div>
     </div>
   );
-}
+};

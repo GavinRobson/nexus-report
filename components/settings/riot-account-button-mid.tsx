@@ -1,8 +1,8 @@
-import { getProfileIconById } from "@/data/riot";
-import { RiotAccountButton } from "./riot-account-button";
+import { getProfileIconById } from '@/data/riot';
+import { RiotAccountButton } from './riot-account-button';
 
 type Props = {
-  riotAccount: {    
+  riotAccount: {
     id: string;
     puuid: string;
     username: string;
@@ -11,14 +11,21 @@ type Props = {
     region: string;
     userId: string;
   };
-}
+};
 
-export const RiotAccountButtonMid = async ({
-  riotAccount,
-}: Props) => {
+export const RiotAccountButtonMid = async ({ riotAccount }: Props) => {
   const profileIconUrl = await getProfileIconById(riotAccount.profileIconId);
 
   return (
-    <RiotAccountButton riotAccount={riotAccount} profileIconUrl={profileIconUrl}/>  
-  )
-}
+    <div className="w-full flex flex-col">
+      <RiotAccountButton
+        riotAccount={riotAccount}
+        profileIconUrl={profileIconUrl}
+      />
+      <div className="flex flex-row -space-x-2 mt-2">
+        <span className="px-2 text-sm">{riotAccount.username}</span>
+        <span className="text-sm text-neutral-400">#{riotAccount.tag}</span>
+      </div>
+    </div>
+  );
+};

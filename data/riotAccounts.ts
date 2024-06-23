@@ -2,36 +2,51 @@ import { db } from '@/lib/db';
 
 export const getRiotAccountsById = async (id: string | undefined) => {
   try {
-    const riotAccounts = await db.riotAccount.findMany({  
-      where: { 
-        userId: id
-      }
+    const riotAccounts = await db.riotAccount.findMany({
+      where: {
+        userId: id,
+      },
     });
 
     if (riotAccounts.length > 0) {
       return riotAccounts;
     }
 
-    return undefined
+    return undefined;
   } catch (error) {
     return null;
   }
-}
+};
 
-export const getRiotAccountByUsernameTag = async (username: string, tag: string) => {
+export const getRiotAccountByPuuid = async (puuid: string) => {
+  try {
+    const riotAccount = await db.riotAccount.findUnique({
+      where: {
+        puuid,
+      },
+    });
+    return riotAccount;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const getRiotAccountByUsernameTag = async (
+  username: string,
+  tag: string
+) => {
   try {
     const riotAccount = await db.riotAccount.findUnique({
       where: {
         username_tag: {
           username,
-          tag
-        }
-      }
+          tag,
+        },
+      },
     });
 
     return riotAccount;
   } catch (error) {
     return null;
   }
-}
-
+};
