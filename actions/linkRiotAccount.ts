@@ -1,56 +1,70 @@
 'use server';
 
 import * as z from 'zod';
+import { revalidatePath } from 'next/cache';
 
 import { getRiotAccountByPuuid } from '@/data/riotAccounts';
+import { getPuuidUsernameTag } from '@/data/riot';
 
 import { RiotAccountSchema } from '@/schemas';
+
 import { db } from '@/lib/db';
-import { getPuuidUsernameTag, getSummonerByPuuid } from '@/data/riot';
+
+import { createRiotAccount } from '@/actions/createRiotAccount';
+
 
 export const linkRiotAccount = async (
   values: z.infer<typeof RiotAccountSchema>,
   id: string | undefined
 ) => {
+
+  // Validate user exists
   if (id === undefined) {
     return { error: 'Invalid id' };
   }
+
+  // Validate correct fields
   const validatedFields = RiotAccountSchema.safeParse(values);
 
   if (!validatedFields.success) {
     return { error: 'Invalid fields!' };
   }
 
-  const { username, tag, region } = validatedFields.data;
+  const { username, tag } = validatedFields.data;
 
+  // Get puuid based on username and tag
   const puuid = await getPuuidUsernameTag(username, tag);
 
-  const exisitingRiotAccount = await getRiotAccountByPuuid(puuid);
-
-  if (exisitingRiotAccount) {
-    return { error: 'This Riot account is already linked!' };
-  }
-
+  /*
+    If riot api returns an error, the riot account does not exist,
+    therefore information was entered incorrectly.
+  */
   if (puuid === undefined) {
     return { error: 'Invalid Riot account' };
   }
 
-  const summoner = await getSummonerByPuuid(puuid);
+  // Get a possible riot account based on puuid.
+  const existingRiotAccount = await getRiotAccountByPuuid(puuid);
 
-  if (summoner.error) {
-    return { error: 'Failed fetching summoner' };
+  // If there is not an existing riot account, create one.
+  if (!existingRiotAccount) {
+    const riotAccount = await createRiotAccount(values, puuid)
+    if (riotAccount.error) {
+      return { error: riotAccount.error };
+    }
   }
 
-  await db.riotAccount.create({
-    data: {
+  // After creating the riot account, update the userId to the user who submitted.
+  await db.riotAccount.update({
+    where: {
       puuid,
-      username,
-      tag,
-      region,
-      profileIconId: summoner.profileIconId.toString(),
-      userId: id,
     },
+    data: {
+      userId: id
+    }
   });
 
-  return { success: 'Success!' };
+  revalidatePath('/settings')
+
+  return { success: 'Success!'}
 };

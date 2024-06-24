@@ -9,7 +9,7 @@ type Props = {
     tag: string;
     profileIconId: string;
     region: string;
-    userId: string;
+    userId: string | null;
   };
 };
 
@@ -22,7 +22,7 @@ export const RiotAccountButtonMid = async ({ riotAccount }: Props) => {
         riotAccount={riotAccount}
         profileIconUrl={profileIconUrl}
       />
-      <div className="flex flex-row -space-x-2 mt-2">
+      <div className="flex flex-row -space-x-2 mb-2 md:mt-2 md:mb-0">
         <span className="px-2 text-sm">{riotAccount.username}</span>
         <span className="text-sm text-neutral-400">#{riotAccount.tag}</span>
       </div>

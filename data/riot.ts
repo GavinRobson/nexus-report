@@ -40,7 +40,12 @@ export const getSummonerByPuuid = async(puuid: string) => {
     const response = await fetch(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}?api_key=${process.env.RIOT_API_KEY}`);
     const data = await response.json();
 
+    if (response.status === 200) {
     return data;
+    }
+
+    return { error: data.status.message }
+
   } catch (error) {
     return ({ error: "Error getting summoner by puuid" })
   }

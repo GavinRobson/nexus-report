@@ -1,25 +1,30 @@
 'use client';
 
 import * as z from 'zod';
-import { linkRiotAccount } from '@/actions/linkRiotAccount';
-import { RiotAccountSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+
 import { Session } from 'next-auth';
 import { useRouter } from 'next/navigation';
+
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
+
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from '../ui/form';
-import { FormError } from '../form-error';
-import { FormSuccess } from '../form-success';
-import { Button } from '../ui/button';
+} from '@/components/ui/form';
+import { FormError } from '@/components/form-error';
+import { FormSuccess } from '@/components/form-success';
+import { Button } from '@/components/ui/button';
+
 import { cn } from '@/lib/utils';
 
+import { linkRiotAccount } from '@/actions/linkRiotAccount';
+
+import { RiotAccountSchema } from '@/schemas';
 type Props = {
   session: Session;
 };
@@ -33,6 +38,7 @@ export const LinkRiotAccount = ({ session }: Props) => {
 
   const form = useForm<z.infer<typeof RiotAccountSchema>>({
     resolver: zodResolver(RiotAccountSchema),
+    mode: 'onTouched',
     defaultValues: {
       username: '',
       tag: '',

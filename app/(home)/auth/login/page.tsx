@@ -9,12 +9,13 @@ import { useRouter } from 'next/navigation';
 
 import { LoginSchema } from '@/schemas';
 
-import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { FormError } from '@/components/form-error';
 import { FormSuccess } from '@/components/form-success';
 
 import { login } from '@/actions/login';
+import { cn } from '@/lib/utils';
 
 const LoginPage = () => {
   const [error, setError] = useState<string | undefined>('');
@@ -25,6 +26,7 @@ const LoginPage = () => {
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
+    mode: 'onTouched',
     defaultValues: {
       email: '',
       password: '',
@@ -38,7 +40,7 @@ const LoginPage = () => {
       login(values).then((data) => {
         setError(data?.error);
         if (!data?.error) {
-          router.push('/account');
+          router.push('/');
         }
       });
     });
@@ -64,7 +66,12 @@ const LoginPage = () => {
                           {...field}
                           type="email"
                           autoComplete="off"
-                          className="block rounded-md px-6 pt-6 pb-1 w-full text-md text-white bg-neutral-800 focus:outline-none focus:ring-0 peer"
+                          className={cn(
+                            'block rounded-md px-6 pt-6 pb-1 w-full text-md text-white focus:outline-none focus:ring-0 peer outline-t',
+                            form.getFieldState('email').error
+                              ? 'bg-[#FF003D]/15 outline outline-1 outline-red-800'
+                              : 'bg-neutral-800'
+                          )}
                           disabled={isPending}
                           placeholder=" "
                         />
@@ -73,6 +80,7 @@ const LoginPage = () => {
                         </label>
                       </div>
                     </FormControl>
+                    <FormMessage className='text-red-800'/>
                   </FormItem>
                 )}
               />

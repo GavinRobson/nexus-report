@@ -50,3 +50,17 @@ export const getRiotAccountByUsernameTag = async (
     return null;
   }
 };
+
+export const getRiotAccountById = async (id: string) => {
+  try { 
+    const riotAccount = await db.riotAccount.findUnique({
+      where: {
+        id
+      }
+    });
+
+    return riotAccount;
+  } catch (error) {
+    return null;
+  }
+}

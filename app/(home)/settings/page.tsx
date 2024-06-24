@@ -19,18 +19,21 @@ const SettingsPage = async () => {
     return (
       <div className="flex flex-col">
         <SettingsHeader />
-        <span>Link Riot Account(s) here:</span>
+          <span className='text-center md:text-left'>
+            Link Riot Account(s) here:
+          </span>
         <DefaultSettings session={session} />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       <SettingsHeader />
-      <div className="flex flex-col md:grid md:grid-cols-4 md:gap-4">
-        {riotAccounts.map((riotAccount, i) => (
-          <RiotAccountButtonMid riotAccount={riotAccount} />
+      <span className='text-center md:text-left'>Linked Riot Account(s):</span>
+      <div className="flex flex-col md:grid md:grid-cols-auto-fill md:gap-4 mt-6">
+        {riotAccounts.map((riotAccount) => (
+          <RiotAccountButtonMid key={riotAccount.id} riotAccount={riotAccount} />
         ))}
         <NewRiotAccountButton />
       </div>

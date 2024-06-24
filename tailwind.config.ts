@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      gridTemplateColumns: {
+        'auto-fill': 'repeat(auto-fill, minmax(200px, 1fr))',
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
