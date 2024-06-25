@@ -9,13 +9,20 @@ import { useRouter } from 'next/navigation';
 
 import { LoginSchema } from '@/schemas';
 
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { FormError } from '@/components/form-error';
 import { FormSuccess } from '@/components/form-success';
 
 import { login } from '@/actions/login';
 import { cn } from '@/lib/utils';
+import { Social } from '@/components/social';
 
 const LoginPage = () => {
   const [error, setError] = useState<string | undefined>('');
@@ -80,7 +87,7 @@ const LoginPage = () => {
                         </label>
                       </div>
                     </FormControl>
-                    <FormMessage className='text-red-800'/>
+                    <FormMessage className="text-red-800" />
                   </FormItem>
                 )}
               />
@@ -115,6 +122,7 @@ const LoginPage = () => {
             </Button>
           </form>
         </Form>
+        <Social />
         <p className="text-neutral-500 mt-12 flex justify-center">
           First time?
           <span

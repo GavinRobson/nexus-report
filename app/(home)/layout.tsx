@@ -4,7 +4,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const HomeLayout = ({ children }: Props) => {
+const HomeLayout = async ({ children }: Props) => {
   return (
     <>
       <Header />

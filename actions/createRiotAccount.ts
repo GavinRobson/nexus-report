@@ -23,13 +23,13 @@ export const createRiotAccount = async (
   const existingRiotAccount = await getRiotAccountByPuuid(puuid);
 
   if (existingRiotAccount) {
-    return { error: 'Riot Account already created!' }
+    return { error: 'Riot Account already created!' };
   }
 
   const summoner = await getSummonerByPuuid(puuid);
 
   if (summoner.error) {
-    return { error: summoner.error }
+    return { error: summoner.error };
   }
 
   await db.riotAccount.create({
@@ -37,10 +37,10 @@ export const createRiotAccount = async (
       puuid,
       username,
       tag,
-      region,
       profileIconId: summoner.profileIconId.toString(),
+      region,
     },
   });
 
   return { success: 'Riot Account Created!' };
-}
+};

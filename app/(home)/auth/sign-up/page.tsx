@@ -7,9 +7,6 @@ import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 
-import { FcGoogle } from 'react-icons/fc'
-import { FaDiscord } from 'react-icons/fa';
-
 import { RegisterSchema } from '@/schemas';
 
 import {
@@ -165,7 +162,7 @@ const SignUpPage = () => {
             </Button>
           </form>
         </Form>
-         <Social />
+        <Social />
         <p className="text-neutral-500 mt-12 flex justify-center">
           Already have an account?
           <span

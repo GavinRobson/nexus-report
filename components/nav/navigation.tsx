@@ -1,6 +1,8 @@
-import { currentUser } from '@clerk/nextjs/server';
 import { NavButton } from '@/components/nav/nav-button';
 import { AccountNavButton } from '@/components/nav/account-nav-button';
+import { auth } from '@/auth';
+import { getRiotAccountsById } from '@/data/riotAccounts';
+import { getProfileIconById } from '@/data/riot';
 
 const routes = [
   {
@@ -18,9 +20,19 @@ const routes = [
 ];
 
 export const Navigation = async () => {
+  const session = await auth();
+
+  const riotAccounts = await getRiotAccountsById(session?.user?.id);
+
+  if (!riotAccounts) return null;
+
+  const profileIconUrls = await getProfileIconById(
+    riotAccounts[0].profileIconId
+  );
+
   return (
     <nav className="flex items-center">
-      <AccountNavButton />
+      <AccountNavButton accounts={riotAccounts} profileIcon={profileIconUrls} />
       {routes.map((route) => (
         <NavButton key={route.href} href={route.href} label={route.label} />
       ))}
