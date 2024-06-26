@@ -23,12 +23,9 @@ export const Navigation = async () => {
   const session = await auth();
 
   const riotAccounts = await getRiotAccountsById(session?.user?.id);
+  console.log(riotAccounts)
 
-  if (!riotAccounts) return null;
-
-  const profileIconUrls = await getProfileIconById(
-    riotAccounts[0].profileIconId
-  );
+  const profileIconUrls = riotAccounts ? await getProfileIconById(riotAccounts[0].profileIconId) : undefined
 
   return (
     <nav className="flex items-center">

@@ -22,7 +22,7 @@ type Props = {
     | null
     | undefined;
 
-  profileIcon: string;
+  profileIcon: string | undefined;
 };
 
 type Info = {
@@ -45,7 +45,7 @@ export const AccountNavButton = ({ accounts, profileIcon }: Props) => {
         size="sm"
         variant="outline"
         className={cn(
-          'min-w-36 bg-[#0e1015] border-t-0 border-l-0 hover:text-white border-neutral-700 hover:border-b-0 transition',
+          'w-48 bg-[#0e1015] border-t-0 border-l-0 hover:text-white border-neutral-700 hover:border-b-0 transition',
           isActive ? 'bg-[#13151b] text-white border-b-0' : 'text-[#45484e]'
         )}
       >
@@ -60,7 +60,7 @@ export const AccountNavButton = ({ accounts, profileIcon }: Props) => {
       size="sm"
       variant="outline"
       className={cn(
-        'group w-[200px] bg-[#0e1015] border-t-0 border-l-0 hover:text-white border-neutral-700 hover:border-b-0 transition',
+        'group w-48 bg-[#0e1015] border-t-0 border-l-0 hover:text-white border-neutral-700 hover:border-b-0 transition',
         isActive ? 'bg-[#13151b] text-white border-b-0' : 'text-[#45484e]'
       )}
     >
@@ -73,15 +73,17 @@ export const AccountNavButton = ({ accounts, profileIcon }: Props) => {
             backgroundImage: `url('${profileIcon}')`,
           }}
           className={cn(
-            'absolute h-4 w-4 bg-cover rounded-full left-2 opacity-60 group-hover:opacity-90 transition',
+            'absolute h-5 w-5 bg-cover rounded-full left-2 opacity-60 group-hover:opacity-90 transition',
             isActive && 'opacity-90'
           )}
         />
         <div>{accounts[0].username}</div>
-        <ChevronsDown
-          className="absolute right-2 hover:opacity-60 transition"
-          size={20}
-        />
+        {accounts.length > 1 && (
+          <ChevronsDown
+            className="absolute right-2 hover:opacity-60 transition"
+            size={20}
+          />
+        )}
       </Link>
     </Button>
   );
