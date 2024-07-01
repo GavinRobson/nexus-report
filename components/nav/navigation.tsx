@@ -23,13 +23,24 @@ export const Navigation = async () => {
   const session = await auth();
 
   const riotAccounts = await getRiotAccountsById(session?.user?.id);
-  console.log(riotAccounts)
 
-  const profileIconUrls = riotAccounts ? await getProfileIconById(riotAccounts[0].profileIconId) : undefined
+  let profileIconUrls;
 
+  if (riotAccounts) {
+    profileIconUrls = await Promise.all(
+      riotAccounts.map(async (account) => {
+        return await getProfileIconById(account.profileIconId);
+      })
+    );
+  } else {
+    profileIconUrls = [''];
+  }
   return (
     <nav className="flex items-center">
-      <AccountNavButton accounts={riotAccounts} profileIcon={profileIconUrls} />
+      <AccountNavButton
+        accounts={riotAccounts}
+        profileIcons={profileIconUrls}
+      />
       {routes.map((route) => (
         <NavButton key={route.href} href={route.href} label={route.label} />
       ))}

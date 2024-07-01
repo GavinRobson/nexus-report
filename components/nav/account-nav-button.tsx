@@ -1,12 +1,13 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronsDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 
 type Props = {
   accounts:
@@ -22,7 +23,7 @@ type Props = {
     | null
     | undefined;
 
-  profileIcon: string | undefined;
+  profileIcons: string[] | undefined;
 };
 
 type Info = {
@@ -30,7 +31,12 @@ type Info = {
   label: string;
 };
 
-export const AccountNavButton = ({ accounts, profileIcon }: Props) => {
+export const AccountNavButton = ({ accounts, profileIcons }: Props) => {
+  const [top, setTop] = useState(false);
+  const [show, setShow] = useState(false);
+
+  const router = useRouter();
+
   const pathname = usePathname();
   const isActive = pathname.includes('/account');
 
@@ -38,14 +44,14 @@ export const AccountNavButton = ({ accounts, profileIcon }: Props) => {
 
   info = { href: '/account', label: 'Account' };
 
-  if (!accounts) {
+  if (!accounts || !profileIcons) {
     return (
       <Button
         asChild
         size="sm"
         variant="outline"
         className={cn(
-          'w-48 bg-[#0e1015] border-t-0 border-l-0 hover:text-white border-neutral-700 hover:border-b-0 transition',
+          'w-[200px] bg-[#0e1015] border-t-0 border-l-0 hover:text-white border-neutral-700 hover:border-b-0 transition',
           isActive ? 'bg-[#13151b] text-white border-b-0' : 'text-[#45484e]'
         )}
       >
@@ -54,37 +60,75 @@ export const AccountNavButton = ({ accounts, profileIcon }: Props) => {
     );
   }
 
+  const handleClick = (id: string) => {
+    !top && setShow(false);
+    !top && router.push(`${info.href}/${id}`);
+  };
+
   return (
-    <Button
-      asChild
-      size="sm"
-      variant="outline"
-      className={cn(
-        'group w-48 bg-[#0e1015] border-t-0 border-l-0 hover:text-white border-neutral-700 hover:border-b-0 transition',
-        isActive ? 'bg-[#13151b] text-white border-b-0' : 'text-[#45484e]'
-      )}
-    >
-      <Link
-        className="relative flex flex-row w-full"
-        href={`${info.href}/${accounts[0].id}`}
-      >
-        <div
-          style={{
-            backgroundImage: `url('${profileIcon}')`,
-          }}
-          className={cn(
-            'absolute h-5 w-5 bg-cover rounded-full left-2 opacity-60 group-hover:opacity-90 transition',
-            isActive && 'opacity-90'
-          )}
-        />
-        <div>{accounts[0].username}</div>
-        {accounts.length > 1 && (
-          <ChevronsDown
-            className="absolute right-2 hover:opacity-60 transition"
-            size={20}
-          />
+    <div className="relative flex flex-col h-full">
+      <Button
+        asChild
+        onClick={() => handleClick(accounts[0].id)}
+        size="sm"
+        variant="outline"
+        className={cn(
+          'group w-48 bg-[#0e1015] border-t-0 border-l-0 hover:text-white border-neutral-700 hover:border-b-0 transition',
+          isActive ? 'bg-[#13151b] text-white border-b-0' : 'text-[#45484e]'
         )}
-      </Link>
-    </Button>
+      >
+        <div className="relative flex flex-row justify-between w-full cursor-default">
+          <div
+            style={{
+              backgroundImage: `url('${profileIcons[0]}')`,
+            }}
+            className={cn(
+              'h-5 w-5 bg-cover rounded-full left-2 opacity-60 group-hover:opacity-90 transition',
+              isActive && 'opacity-90'
+            )}
+          />
+          <div>{accounts[0].username}</div>
+          {accounts.length > 1 && (
+            <ChevronsDown
+              onMouseEnter={() => !top && setTop(true)}
+              onMouseLeave={() => top && setTop(false)}
+              onClick={() => setShow(!show)}
+              className="hover:opacity-60 transition cursor-pointer"
+              size={20}
+            />
+          )}
+        </div>
+      </Button>
+      {show &&
+        accounts.slice(1).map((account, i) => {
+          return (
+            <Button
+              asChild
+              onClick={() => handleClick(account.id)}
+              size="sm"
+              variant="outline"
+              className={cn(
+                'absolute group w-48 bg-[#0e1015] border-t-0 border-l-0 hover:text-white border-neutral-700 hover:border-b-0 transition',
+                isActive
+                  ? 'bg-[#13151b] text-white border-b-0'
+                  : 'text-[#45484e]'
+              )}
+            >
+              <div className="relative flex flex-row justify-start   space-x-6 w-full cursor-default">
+                <div
+                  style={{
+                    backgroundImage: `url('${profileIcons[i + 1]}')`,
+                  }}
+                  className={cn(
+                    'h-5 w-5 bg-cover rounded-full left-2 opacity-60 group-hover:opacity-90 transition',
+                    isActive && 'opacity-90'
+                  )}
+                />
+                <div>{account.username}</div>
+              </div>
+            </Button>
+          );
+        })}
+    </div>
   );
 };
