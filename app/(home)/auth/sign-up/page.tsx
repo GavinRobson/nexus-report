@@ -51,7 +51,7 @@ const SignUpPage = () => {
         setError(data?.error);
         if (data?.success) {
           login(values).then(() => {
-            router.push('/account');
+            router.push('/settings');
           });
         }
       });

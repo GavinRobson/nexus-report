@@ -3,10 +3,10 @@
 import * as z from 'zod';
 
 import { getRiotAccountByPuuid } from '@/data/riotAccounts';
+import { getSummonerByPuuid, getMatchIdsByPuuid, getMatchByMatchId } from '@/data/riot';
 
-import { RiotAccountSchema } from '@/schemas';
 import { db } from '@/lib/db';
-import { getSummonerByPuuid } from '@/data/riot';
+import { RiotAccountSchema } from '@/schemas';
 
 export const createRiotAccount = async (
   values: z.infer<typeof RiotAccountSchema>,
@@ -32,7 +32,7 @@ export const createRiotAccount = async (
     return { error: summoner.error };
   }
 
-  await db.riotAccount.create({
+  const riotAccount = await db.riotAccount.create({
     data: {
       puuid,
       username,
@@ -41,6 +41,20 @@ export const createRiotAccount = async (
       region,
     },
   });
+
+  const matchIds = await getMatchIdsByPuuid(puuid);
+  matchIds.map(async (matchId: string) => {
+    const matchData = await getMatchByMatchId(matchId);
+
+    await db.match.create({
+      data: {
+        matchId: matchId,
+        matchData: matchData.info,
+        participants: matchData.metadata.participants,
+        riotAccountId: riotAccount.id
+      }
+    })
+  })
 
   return { success: 'Riot Account Created!' };
 };

@@ -54,6 +54,10 @@ export const linkRiotAccount = async (
     }
   }
 
+  if (existingRiotAccount?.userId) {
+    return { error: "Already linked to an account" }
+  }
+
   // After creating the riot account, update the userId to the user who submitted.
   await db.riotAccount.update({
     where: {
