@@ -69,6 +69,7 @@ model RiotAccount {
 model Match {
   id           String   @id @default(uuid())
   matchId      String
+  matchData    Json
   participants String[]
 
   riotAccount   RiotAccount @relation(fields: [riotAccountId], references: [id])

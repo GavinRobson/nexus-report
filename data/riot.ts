@@ -41,12 +41,38 @@ export const getSummonerByPuuid = async(puuid: string) => {
     const data = await response.json();
 
     if (response.status === 200) {
-    return data;
+      return data;
     }
 
     return { error: data.status.message }
 
   } catch (error) {
     return ({ error: "Error getting summoner by puuid" })
+  }
+}
+
+export const getMatchIdsByPuuid = async(puuid: string) => {
+  try {
+    const response = await fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?count=10&api_key=${process.env.RIOT_API_KEY}`)
+    const data = await response.json();
+
+    if (response.status === 200) {
+      return data
+    }
+  } catch (error) {
+    return ({ error: "Error getting match ids by puuid" });
+  }
+}
+
+export const getMatchByMatchId = async(matchId: string) => {
+  try {
+    const response = await fetch(`https://americas.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${process.env.RIOT_API_KEY}`)
+    const data = await response.json();
+
+    if (response.status === 200) {
+      return data;
+    }
+  } catch (error) {
+    return ({ error: "Error getting match by match id" });  
   }
 }

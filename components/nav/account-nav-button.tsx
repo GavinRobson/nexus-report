@@ -77,7 +77,7 @@ export const AccountNavButton = ({ accounts, profileIcons }: Props) => {
           isActive ? 'bg-[#13151b] text-white border-b-0' : 'text-[#45484e]'
         )}
       >
-        <div className="relative flex flex-row justify-between w-full cursor-default">
+        <div className="relative flex flex-row space-x-2 justify-between w-full cursor-default">
           <div
             style={{
               backgroundImage: `url('${profileIcons[0]}')`,
