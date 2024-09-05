@@ -34,9 +34,9 @@ type Info = {
 export const AccountNavButton = ({ accounts, profileIcons }: Props) => {
   const [top, setTop] = useState(false);
   const [show, setShow] = useState(false);
-
+  
   const router = useRouter();
-
+  
   const pathname = usePathname();
   const isActive = pathname.includes('/account');
 
@@ -65,70 +65,73 @@ export const AccountNavButton = ({ accounts, profileIcons }: Props) => {
     !top && router.push(`${info.href}/${id}`);
   };
 
-  return (
-    <div className="relative flex flex-col h-full">
-      <Button
-        asChild
-        onClick={() => handleClick(accounts[0].id)}
-        size="sm"
-        variant="outline"
-        className={cn(
-          'group w-48 bg-[#0e1015] border-t-0 border-l-0 hover:text-white border-neutral-700 hover:border-b-0 transition',
-          isActive ? 'bg-[#13151b] text-white border-b-0' : 'text-[#45484e]'
-        )}
-      >
-        <div className="relative flex flex-row space-x-2 justify-between w-full cursor-default">
-          <div
-            style={{
-              backgroundImage: `url('${profileIcons[0]}')`,
-            }}
-            className={cn(
-              'h-5 w-5 bg-cover rounded-full left-2 opacity-60 group-hover:opacity-90 transition',
-              isActive && 'opacity-90'
-            )}
-          />
-          <div>{accounts[0].username}</div>
-          {accounts.length > 1 && (
-            <ChevronsDown
-              onMouseEnter={() => !top && setTop(true)}
-              onMouseLeave={() => top && setTop(false)}
-              onClick={() => setShow(!show)}
-              className="hover:opacity-60 transition cursor-pointer"
-              size={20}
-            />
+return (
+  <div className="relative flex flex-col h-full">
+    <Button
+      asChild
+      onClick={() => handleClick(accounts[0].id)}
+      size="sm"
+      variant="outline"
+      className={cn(
+        'group w-48 bg-[#0e1015] border-t-0 border-l-0 hover:text-white border-neutral-700 hover:border-b-0 transition',
+        isActive ? 'bg-[#13151b] text-white border-b-0' : 'text-[#45484e]'
+      )}
+    >
+      <div className="relative flex flex-row space-x-2 justify-between w-full cursor-default">
+        <div
+          style={{
+            backgroundImage: `url('${profileIcons[0]}')`,
+          }}
+          className={cn(
+            'h-5 w-5 bg-cover rounded-full left-2 opacity-60 group-hover:opacity-90 transition',
+            isActive && 'opacity-90'
           )}
-        </div>
-      </Button>
-      {show &&
-        accounts.slice(1).map((account, i) => {
-          return (
-            <Button
-              asChild
-              onClick={() => handleClick(account.id)}
-              size="sm"
-              variant="outline"
+        />
+        <div>{accounts[0].username}</div>
+        {accounts.length > 1 && (
+          <ChevronsDown
+            onMouseEnter={() => !top && setTop(true)}
+            onMouseLeave={() => top && setTop(false)}
+            onClick={() => setShow(!show)}
+            className="hover:opacity-60 transition cursor-pointer"
+            size={20}
+          />
+        )}
+      </div>
+    </Button>
+    {show &&
+      accounts.slice(1).map((account, i) => (
+        <Button
+          asChild
+          onClick={() => handleClick(account.id)}
+          size="sm"
+          variant="outline"
+          key={account.id}
+          className={cn(
+            'absolute left-0 group w-48 bg-[#0e1015] border-t-0 border-l-0 hover:text-white border-neutral-700 hover:border-b-0 transition',
+            isActive
+              ? 'bg-[#13151b] text-white border-b-0'
+              : 'text-[#45484e]'
+          )}
+          style={{
+            top: `${(i + 1) * 2.5}rem`, // Position each box below the previous one
+            height: '2.5rem', // Fixed height for consistency
+          }}
+        >
+          <div className="relative flex flex-row justify-start space-x-6 w-full cursor-default">
+            <div
+              style={{
+                backgroundImage: `url('${profileIcons[i + 1]}')`,
+              }}
               className={cn(
-                'absolute group w-48 bg-[#0e1015] border-t-0 border-l-0 hover:text-white border-neutral-700 hover:border-b-0 transition',
-                isActive
-                  ? 'bg-[#13151b] text-white border-b-0'
-                  : 'text-[#45484e]'
+                'h-5 w-5 bg-cover rounded-full left-2 opacity-60 group-hover:opacity-90 transition',
+                isActive && 'opacity-90'
               )}
-            >
-              <div className="relative flex flex-row justify-start   space-x-6 w-full cursor-default">
-                <div
-                  style={{
-                    backgroundImage: `url('${profileIcons[i + 1]}')`,
-                  }}
-                  className={cn(
-                    'h-5 w-5 bg-cover rounded-full left-2 opacity-60 group-hover:opacity-90 transition',
-                    isActive && 'opacity-90'
-                  )}
-                />
-                <div>{account.username}</div>
-              </div>
-            </Button>
-          );
-        })}
-    </div>
-  );
+            />
+            <div>{account.username}</div>
+          </div>
+        </Button>
+      ))}
+  </div>
+);
 };
