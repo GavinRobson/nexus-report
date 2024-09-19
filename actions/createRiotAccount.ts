@@ -43,9 +43,9 @@ export const createRiotAccount = async (
   });
 
   const matchIds = await getMatchIdsByPuuid(puuid);
-  matchIds.map(async (matchId: string) => {
+  await matchIds.map(async (matchId: string) => {
     const matchData = await getMatchByMatchId(matchId);
-
+    console.log(matchData.info);
     await db.match.create({
       data: {
         matchId: matchId,
